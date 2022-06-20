@@ -14,11 +14,13 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        //
+        $equipment = Equipment::all();
+
+        return view('equipment.index', compact('equipment'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new .resource.
      *
      * @return \Illuminate\Http\Response
      */
