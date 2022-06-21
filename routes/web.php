@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EquipmentController;
+use App\Models\Equipment;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resources([
+    '/api/equipment' => EquipmentController::class
+]);
