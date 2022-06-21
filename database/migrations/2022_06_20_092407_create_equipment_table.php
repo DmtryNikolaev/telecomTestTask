@@ -19,7 +19,6 @@ return new class extends Migration
             $table->bigInteger('code_of_type_equipment');
             $table->unique('equipment_serial_number_unique');
             $table->text('note');
-            $table->timestamps();
         });
     }
 

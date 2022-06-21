@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->text('type_name');
             $table->text('serial_number_mask');
-            $table->timestamps();
         });
     }
 
