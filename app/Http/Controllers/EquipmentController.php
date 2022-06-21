@@ -26,7 +26,8 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        //
+        $equipment = new Equipment();
+        return view('equipment.create', compact('equipment'));
     }
 
     /**
