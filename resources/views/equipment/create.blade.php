@@ -6,21 +6,21 @@
     <div class="mb-1">
         <label for="staticEmail" class="col-form-label">Тип оборудования</label>
         <div class="input-form">
-            {{ Form::select('Тип оборудования', ['1' => 'TP-Link TL-WR74', '2' => 'D-Link DIR-300', '3' => 'D-Link DIR-300 S'], null, ['class' => 'form-select'])}}
+            {{ Form::select('code_of_type_equipment', ['1' => 'TP-Link TL-WR74', '2' => 'D-Link DIR-300', '3' => 'D-Link DIR-300 S'], null, ['class' => 'form-select'])}}
         </div>
     </div>
 
     <div class="mb-1">
         <label for="staticEmail" class="col-form-label">Серийные номера</label>
         <div class="input-form">
-            {{ Form::text('Серийные номера', null, ['class' => 'form-control']) }}
+            {{ Form::textarea('serial_number', null, ['class' => 'form-control']) }}
         </div>
     </div>
 
     <div class="mb-1">
-        <label for="staticEmail" class="col-form-label">Серийные номера</label>
+        <label for="staticEmail" class="col-form-label">Примечание</label>
         <div class="input-form">
-            {{ Form::textarea('Примечание', null, ['class' => 'form-control']) }}
+            {{ Form::textarea('note', null, ['class' => 'form-control']) }}
         </div>
     </div>
     {{ Form::submit('Добавить', ['class' => 'form-control mt-2 btn btn-primary']) }}
