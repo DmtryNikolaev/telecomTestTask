@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('code');
             $table->bigInteger('code_of_type_equipment');
-            $table->unique('equipment_serial_number_unique');
+            $table->unique('serial_number');
             $table->text('note');
         });
     }
