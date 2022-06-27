@@ -42,14 +42,39 @@ class EquipmentController extends Controller
     {
         $serialNumberMask = EquipmentType::where('id', $request->input('code_of_type_equipment'))->first()->serial_number_mask;
 
-        $serialNumberWithSingleQuotes = str_replace("'", '"', $request->input('serial_number'));
+        function isValidatedSerialNumber($snMask, $sn)
+        {
+            function getFormattedJsonString($value)
+            {
+                $valueReplaced = str_replace("'", '"', $value);
 
-        dd(json_decode($serialNumberWithSingleQuotes, true));
+                return json_decode($valueReplaced, true);
+            }
+            $regexInArr = [
+                'N' => '[0-9]',
+                'A' => '[A-Z]',
+                'a' => '[a-z]',
+                'X' => '[A-Z0-9]',
+                'Z' => '[-_@]'
+            ];
+            $serialNumberFormatted = getFormattedJsonString($sn);
+            $serialNumbers = collect($serialNumberFormatted)->keyBy('sn')->first();
 
-        $data = $this->validate($request, [
-            'code_of_type_equipment' => 'required',
-            'serial_number' => 'required|',
-        ]);
+            foreach ($serialNumbers as $snElem) {
+                $serialNumbersSplit = mb_str_split($snElem);
+                $snMaskSplit = mb_str_split($snMask);
+
+                foreach ($snMaskSplit as $elemOfSnMask) {
+                    if (!preg_match("/{$regexInArr[$elemOfSnMask]}/", $snElem)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        dd(isValidatedSerialNumber($serialNumberMask, $request->input('serial_number')));
     }
 
     /**
