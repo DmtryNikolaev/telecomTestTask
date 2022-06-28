@@ -15,9 +15,7 @@ return new class extends Migration
     {
         Schema::create('equipment', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('code');
-            $table->bigInteger('code_of_type_equipment');
-            $table->unique('serial_number');
+            $table->foreignId('code_of_type_equipment')->references('id')->on('equipment_types');
             $table->text('note');
         });
     }
