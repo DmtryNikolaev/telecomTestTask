@@ -16,3 +16,4 @@ composer.phar
 /vendor/
 public/mix-manifest.json
 package-lock.json
+composer.lock
