@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Equipment extends Model
 {
+    protected $fillable = ['serial_number'];
+
     use HasFactory;
 }
