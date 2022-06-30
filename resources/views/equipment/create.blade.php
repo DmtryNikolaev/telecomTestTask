@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
+
 @section('content')
+    @if ($errors->any())
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     {{ Form::model($equipment, ['route' => 'equipment.store', 'class' => 'd-flex justify-content-between flex-column gap-10 mt-4 w-25 m-auto', 'enctype' => 'multipart/form-data']) }}
     <div class="mb-1">
