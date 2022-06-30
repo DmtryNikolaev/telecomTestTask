@@ -41,52 +41,50 @@ class EquipmentController extends Controller
     public function store(Request $request)
     {
         $serialNumberMask = EquipmentType::where('id', $request->input('code_of_type_equipment'))->first()->serial_number_mask;
-
-        function isValidatedSerialNumber($snMask, $sn)
-        {
-            function getFormattedJsonString($value)
-            {
-                $valueReplaced = str_replace("'", '"', $value);
-
-                return json_decode($valueReplaced, true);
-            }
-            $regularExpressions = [
-                'N' => '[0-9]',
-                'A' => '[A-Z]',
-                'a' => '[a-z]',
-                'X' => '[A-Z0-9]',
-                'Z' => '[-_@]'
-            ];
-            $serialNumberFormatted = getFormattedJsonString($sn);
-            $serialNumbers = collect($sn)->keyBy('sn')->first();
-            $snMaskSplit = mb_str_split($snMask);
-            $regex = collect($snMaskSplit)->map(function ($regex) use ($regularExpressions) {
-                return $regularExpressions[$regex];
-            })->implode('');
-
-            foreach ($serialNumbers as $snElem) {
-                if (!preg_match_all("/{$regex}/", $snElem)) {
-                    return false;
-                }
-            }
-//            foreach ($serialNumbers as $snElem) {
-//                $serialNumbersSplit = mb_str_split($snElem);
+//        function isValidatedSerialNumber($snMask, $sn)
+//        {
+//            function getFormattedJsonString($value)
+//            {
+//                $valueReplaced = str_replace("'", '"', $value);
 //
-//                foreach ($snMaskSplit as $elemOfSnMask) {
-//                    if (!preg_match("/{$regexInArr[$elemOfSnMask]}/", $snElem)) {
-//                        return false;
-//                    }
+//                return json_decode($valueReplaced, true);
+//            }
+//            $regularExpressions = [
+//                'N' => '[0-9]',
+//                'A' => '[A-Z]',
+//                'a' => '[a-z]',
+//                'X' => '[A-Z0-9]',
+//                'Z' => '[-_@]'
+//            ];
+//            $serialNumberFormatted = getFormattedJsonString($sn);
+//            $serialNumbers = collect($sn)->keyBy('sn')->first();
+//            $snMaskSplit = mb_str_split($snMask);
+//            $regex = collect($snMaskSplit)->map(function ($regex) use ($regularExpressions) {
+//                return $regularExpressions[$regex];
+//            })->implode('');
+//
+//            foreach ($serialNumbers as $snElem) {
+//                if (!preg_match_all("/{$regex}/", $snElem)) {
+//                    return false;
 //                }
 //            }
-            return true;
-        }
-
+////            foreach ($serialNumbers as $snElem) {
+////                $serialNumbersSplit = mb_str_split($snElem);
+////
+////                foreach ($snMaskSplit as $elemOfSnMask) {
+////                    if (!preg_match("/{$regexInArr[$elemOfSnMask]}/", $snElem)) {
+////                        return false;
+////                    }
+////                }
+////            }
+//            return true;
+//        }
         function getFormattedJsonString($value)
         {
             $valueReplaced = str_replace("'", '"', $value);
             return json_decode($valueReplaced, true);
         }
-        $serialNumberFormatted = getFormattedJsonString($request->input('serial_number'));
+//        $serialNumberFormatted = getFormattedJsonString($request->input('serial_number'));
         $regularExpressions = [
             'N' => '[0-9]',
             'A' => '[A-Z]',
@@ -94,16 +92,21 @@ class EquipmentController extends Controller
             'X' => '[A-Z0-9]',
             'Z' => '[-_@]'
         ];
-        $serialNumbers = collect($serialNumberFormatted)->keyBy('sn')->first();
+//        $serialNumbers = collect($serialNumberFormatted)->keyBy('sn')->first();
         $snMaskSplit = mb_str_split($serialNumberMask);
         $regex = collect($snMaskSplit)->map(function ($regex) use ($regularExpressions) {
             return $regularExpressions[$regex];
         })->implode('');
 
         $data = $this->validate($request, [
-            'serial_number' => ['required', function ($attribute, $serialNumber, $fail) use ($regex) {
-                if (preg_match_all("/{$regex}/"))
-            }],
+            'serial_number' => ['required', function ($attribute, $snUnformat, $fail) use ($regex, $serialNumberMask) {
+                $serialNumbers = getFormattedJsonString($snUnformat)['sn'];
+                foreach ($serialNumbers as $serialNumber) {
+                    if (!preg_match_all("/^{$regex}/", $serialNumber)) {
+                        $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
+                    }
+                }
+            }]
         ]);
 
         $equipment = new Equipment();
