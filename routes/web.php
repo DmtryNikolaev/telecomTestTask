@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\EquipmentController;
-use App\Models\Equipment;
 use Illuminate\Support\Facades\Route;
+use App\Models\EquipmentType;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +22,9 @@ Route::get('/', function () {
 Route::resources([
     '/api/equipment' => EquipmentController::class
 ]);
+
+Route::get('/api/equipment-type', function () {
+    $equipmentType = EquipmentType::all();
+
+    return view('equipmentType.index', compact('equipmentType'));
+});
