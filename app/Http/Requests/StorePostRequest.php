@@ -42,12 +42,16 @@ class StorePostRequest extends FormRequest
         return [
             'code_of_type_equipment' => 'required|min:0|max:100',
             'serial_number' => ['required', function ($attribute, $snUnformat, $fail) use ($regex, $serialNumberMask) {
-                $serialNumbers = getFormattedJsonString($snUnformat)['sn'];
+                if (is_array(getFormattedJsonString($snUnformat))) {
+                    $serialNumbers = getFormattedJsonString($snUnformat)['sn'];
 
-                foreach ($serialNumbers as $serialNumber) {
-                    if (!preg_match_all("/^{$regex}/", $serialNumber)) {
-                        $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
+                    foreach ($serialNumbers as $serialNumber) {
+                        if (!preg_match_all("/^{$regex}/", $serialNumber)) {
+                            $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
+                        }
                     }
+                } elseif (!is_array(getFormattedJsonString($snUnformat))) {
+                    $fail("{$attribute} должен быть массивом или json");
                 }
             }],
             'note' => 'required|string'
