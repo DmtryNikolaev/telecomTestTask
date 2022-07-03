@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Equipment extends Model
 {
-    protected $fillable = ['serial_number'];
+    protected $guarded = ['api_token', '_token'];
 
     use HasFactory;
 }
