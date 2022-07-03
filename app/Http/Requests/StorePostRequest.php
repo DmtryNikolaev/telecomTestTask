@@ -4,8 +4,10 @@ namespace App\Http\Requests;
 
 use App\Models\EquipmentType;
 use Illuminate\Foundation\Http\FormRequest;
+use function Resources\SerialMaskValidate\checkSerialMask;
 
 require_once(resource_path('src/FormattedJsonString.php'));
+require_once(resource_path('src/SerialMaskValidate.php'));
 
 class StorePostRequest extends FormRequest
 {
@@ -27,27 +29,16 @@ class StorePostRequest extends FormRequest
     public function rules()
     {
         $serialNumberMask = EquipmentType::where('id', $this->input('code_of_type_equipment'))->first()->serial_number_mask;
-        $regularExpressions = [
-            'N' => '[0-9]',
-            'A' => '[A-Z]',
-            'a' => '[a-z]',
-            'X' => '[A-Z0-9]',
-            'Z' => '[-_@]'
-        ];
-        $snMaskSplit = mb_str_split($serialNumberMask);
-        $regex = collect($snMaskSplit)->map(function ($regex) use ($regularExpressions) {
-            return $regularExpressions[$regex];
-        })->implode('');
-        $validateSerialNumber = function ($attribute, $snUnformat, $fail) use ($regex, $serialNumberMask) {
-            if (is_array(getFormattedJsonString($snUnformat))) {
-                $serialNumbers = getFormattedJsonString($snUnformat)['sn'];
+        $validateSerialNumber = function ($attribute, $snNotFormat, $fail) use ($serialNumberMask) {
+            if (is_array(getFormattedJsonString($snNotFormat))) {
+                $serialNumbers = getFormattedJsonString($snNotFormat)['sn'];
 
                 foreach ($serialNumbers as $serialNumber) {
-                    if (!preg_match_all("/^{$regex}/", $serialNumber)) {
+                    if (checkSerialMask($serialNumber, $serialNumberMask) === false) {
                         $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
                     }
                 }
-            } elseif (!is_array(getFormattedJsonString($snUnformat))) {
+            } elseif (!is_array(getFormattedJsonString($snNotFormat))) {
                 $fail("{$attribute} должен быть массивом или json");
             }
         };
