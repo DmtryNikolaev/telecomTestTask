@@ -38,22 +38,23 @@ class StorePostRequest extends FormRequest
         $regex = collect($snMaskSplit)->map(function ($regex) use ($regularExpressions) {
             return $regularExpressions[$regex];
         })->implode('');
+        $validateSerialNumber = function ($attribute, $snUnformat, $fail) use ($regex, $serialNumberMask) {
+            if (is_array(getFormattedJsonString($snUnformat))) {
+                $serialNumbers = getFormattedJsonString($snUnformat)['sn'];
+
+                foreach ($serialNumbers as $serialNumber) {
+                    if (!preg_match_all("/^{$regex}/", $serialNumber)) {
+                        $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
+                    }
+                }
+            } elseif (!is_array(getFormattedJsonString($snUnformat))) {
+                $fail("{$attribute} должен быть массивом или json");
+            }
+        };
 
         return [
             'code_of_type_equipment' => 'required|min:0|max:100',
-            'serial_number' => ['required', function ($attribute, $snUnformat, $fail) use ($regex, $serialNumberMask) {
-                if (is_array(getFormattedJsonString($snUnformat))) {
-                    $serialNumbers = getFormattedJsonString($snUnformat)['sn'];
-
-                    foreach ($serialNumbers as $serialNumber) {
-                        if (!preg_match_all("/^{$regex}/", $serialNumber)) {
-                            $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
-                        }
-                    }
-                } elseif (!is_array(getFormattedJsonString($snUnformat))) {
-                    $fail("{$attribute} должен быть массивом или json");
-                }
-            }],
+            'serial_number' => ['required', $validateSerialNumber],
             'note' => 'required|string'
         ];
     }
