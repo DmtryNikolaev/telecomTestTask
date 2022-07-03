@@ -5,6 +5,7 @@
 <div class="equipments">
     @foreach ($equipment as $elem)
     <div class="border border-secondary p-2 rounded-3 staff__item">
+        <input type="hidden" name="api_token" value="{{config('apitokens')[0]}}">
         <div class="d-flex">
             Код типа оборудования: <b>{{$elem->code_of_type_equipment}}</b>
         </div>
