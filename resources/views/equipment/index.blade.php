@@ -16,13 +16,13 @@
             Примечание: <b>{{$elem->note}}</b>
         </div>
 
-{{--        {{ Form::open(['route' => ['staff.destroy', $employee], 'method' => 'delete', 'class' => 'd-inline-block w-100 mt-2']) }}--}}
-{{--        <div class="d-flex justify-content-between">--}}
-{{--            <button type="submit" class="btn btn-primary" data-confirm="Вы уверены?" data-method="delete"--}}
-{{--                rel="nofollow">Удалить</button>--}}
-{{--            <a href="{{ route('staff.edit', $employee) }}" class="btn btn-primary">Редактировать</a>--}}
-{{--            <a href="{{ route('staff.show', $employee) }}" class="btn btn-primary">Посмотреть</a>--}}
-{{--        </div>--}}
+        {{ Form::open(['route' => ['equipment.destroy', $elem], 'method' => 'delete', 'class' => 'd-inline-block w-100 mt-2']) }}
+        <input type="hidden" name="api_token" value="{{config('apitokens')[0]}}">
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary" data-confirm="Вы уверены?" data-method="delete" rel="nofollow">Удалить</button>
+            <a href="{{ route('equipment.edit', $elem) }}?api_token={{config('apitokens')[0]}}" class="btn btn-primary">Редактировать</a>
+            <a href="{{ route('equipment.show', $elem) }}?api_token={{config('apitokens')[0]}}" class="btn btn-primary">Посмотреть</a>
+        </div>
         {{ Form::close() }}
     </div>
     @endforeach

@@ -105,8 +105,12 @@ class EquipmentController extends Controller
      * @param \App\Models\Equipment $equipment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Equipment $equipment)
+    public function destroy(Request $request, Equipment $equipment)
     {
-        //
+
+        $equipment->delete();
+
+        return redirect()
+            ->route('equipment.index', ['api_token' => $request->input('api_token')]);
     }
 }
