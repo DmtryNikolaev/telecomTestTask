@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdateEquipmentRequest;
 use App\Models\Equipment;
 use App\Models\EquipmentType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use function MongoDB\BSON\toJSON;
 
 class EquipmentController extends Controller
 {
@@ -89,9 +88,15 @@ class EquipmentController extends Controller
      * @param \App\Models\Equipment $equipment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Equipment $equipment)
+    public function update(UpdateEquipmentRequest $request, Equipment $equipment)
     {
-        //
+        $request->validated();
+
+        $equipment->fill($request->all());
+        $equipment->save();
+
+        return redirect()
+            ->route('equipment.index', ['api_token' => $request->input('api_token')]);
     }
 
     /**
