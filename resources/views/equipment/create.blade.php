@@ -14,6 +14,7 @@
 
     {{ Form::model($equipment, ['route' => 'equipment.store', 'class' => 'd-flex justify-content-between flex-column gap-10 mt-4 w-25 m-auto', 'enctype' => 'multipart/form-data']) }}
     <div class="mb-1">
+        <input type="hidden" name="api_token" value="{{config('apitokens')[0]}}">
         <label for="staticEmail" class="col-form-label">Тип оборудования</label>
         <div class="input-form">
             {{ Form::select('code_of_type_equipment', ['1' => 'TP-Link TL-WR74', '2' => 'D-Link DIR-300', '3' => 'D-Link DIR-300 S'], null, ['class' => 'form-select'])}}
