@@ -42,8 +42,18 @@ class EquipmentController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $serialNumberMask = EquipmentType::where('id', $request->input('code_of_type_equipment'))->first()->serial_number_mask;
         $request->validated();
+        $serialNumbers = getFormattedJsonString($request->serial_number)['sn'];
+
+        foreach ($serialNumbers as $serialNumber) {
+            $equipment = new Equipment();
+
+            $equipment->code_of_type_equipment = $request->input('code_of_type_equipment');
+            $equipment->serial_number = $serialNumber;
+            $equipment->note = $request->input('note');
+
+            $equipment->save();
+        }
 
         return redirect()
             ->route('equipment.index');
