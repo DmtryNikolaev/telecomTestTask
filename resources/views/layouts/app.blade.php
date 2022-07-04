@@ -11,8 +11,19 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-light bg-light justify-content-between container">
+        <a class="navbar-brand">Telecom</a>
+        <form class="form-inline" action="{{route('searchSN')}}">
+            <input type="hidden" name="api_token" value="{{config('apitokens')[0]}}">
+            <small>Поиск по серийному номеру</small>
+            <div class="d-flex">
+                <input class="form-control mr-sm-2 me-sm-2" type="text" placeholder="Search" aria-label="Search" id="s" name="serial_number">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </div>
+        </form>
+    </nav>
     <div class="container mt-4">
         @yield('content')
     </div>
-    <script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('js/app.js')}}"></script>
 </body>

@@ -28,3 +28,5 @@ Route::get('/api/equipment-type', function () {
 
     return view('equipmentType.index', compact('equipmentType'));
 });
+
+Route::get('/searchSN', [EquipmentController::class, 'searchSN'])->name('searchSN');

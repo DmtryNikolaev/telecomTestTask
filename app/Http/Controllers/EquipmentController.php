@@ -113,4 +113,12 @@ class EquipmentController extends Controller
         return redirect()
             ->route('equipment.index', ['api_token' => $request->input('api_token')]);
     }
+
+    public function searchSN(Request $request)
+    {
+        $search = $request->input('serial_number');
+        $equipment = Equipment::where('serial_number', 'LIKE', "%{$search}%")->orderBy('serial_number')->paginate(10);
+
+        return view('equipment.index', compact('equipment'));
+    }
 }
