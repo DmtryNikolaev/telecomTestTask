@@ -77,7 +77,7 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
-        //
+        return view('equipment.edit', compact('equipment'));
     }
 
     /**
@@ -113,10 +113,12 @@ class EquipmentController extends Controller
             ->route('equipment.index', ['api_token' => $request->input('api_token')]);
     }
 
-    public function searchSN(Request $request)
+    public function search(Request $request)
     {
-        $search = $request->input('serial_number');
-        $equipment = Equipment::where('serial_number', 'LIKE', "%{$search}%")->orderBy('serial_number')->paginate(10);
+        $search = $request->input('search');
+        $equipment = Equipment::where('serial_number', 'LIKE', "%{$search}%")
+            ->orWhere('note', 'LIKE', "%{$search}%")
+            ->orderBy('serial_number')->paginate(10);
 
         return view('equipment.index', compact('equipment'));
     }
