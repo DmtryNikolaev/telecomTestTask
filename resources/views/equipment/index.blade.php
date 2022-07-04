@@ -2,7 +2,8 @@
 
 @section('content')
 <h3 class="mb-3">Список оборудования</h3>
-<div class="equipments">
+<a href="{{ route('equipment.create') }}?api_token={{config('apitokens')[0]}}" class="btn btn-primary">Создать запись</a>
+<div class="equipments mt-3 ">
     @foreach ($equipment as $elem)
     <div class="border border-secondary p-2 rounded-3 staff__item">
         <input type="hidden" name="api_token" value="{{config('apitokens')[0]}}">
