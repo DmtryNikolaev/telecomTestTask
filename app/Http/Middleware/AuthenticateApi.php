@@ -6,6 +6,12 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class AuthenticateApi extends Middleware
 {
+    /**
+     * @param $request
+     * @param array $guards
+     * @return void
+     * @throws \Illuminate\Auth\AuthenticationException
+     */
     protected function authenticate($request, array $guards)
     {
         $token = $request->query('api_token');

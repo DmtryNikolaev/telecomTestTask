@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @param $value
+ * @return mixed
+ */
 function getFormattedJsonString($value)
 {
     $valueReplaced = str_replace("'", '"', $value);

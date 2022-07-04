@@ -113,6 +113,10 @@ class EquipmentController extends Controller
             ->route('equipment.index', ['api_token' => $request->input('api_token')]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function search(Request $request)
     {
         $search = $request->input('search');

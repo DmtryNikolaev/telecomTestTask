@@ -2,6 +2,11 @@
 
 namespace Resources\SerialMaskValidate;
 
+/**
+ * @param $serial
+ * @param $mask
+ * @return bool
+ */
 function checkSerialMask ($serial, $mask)
 {
     if (strlen($serial) != strlen($mask))
