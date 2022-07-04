@@ -31,7 +31,7 @@ class StorePostRequest extends FormRequest
         $serialNumberMask = EquipmentType::where('id', $this->input('code_of_type_equipment'))->first()->serial_number_mask;
         $validateSerialNumber = function ($attribute, $snNotFormat, $fail) use ($serialNumberMask) {
             if (is_array(getFormattedJsonString($snNotFormat))) {
-                $serialNumbers = getFormattedJsonString($snNotFormat)['sn'];
+                $serialNumbers = isset(getFormattedJsonString($snNotFormat)['sn']) ? getFormattedJsonString($snNotFormat)['sn'] : collect(getFormattedJsonString($snNotFormat))->pluck('sn');
 
                 foreach ($serialNumbers as $serialNumber) {
                     if (checkSerialMask($serialNumber, $serialNumberMask) === false) {

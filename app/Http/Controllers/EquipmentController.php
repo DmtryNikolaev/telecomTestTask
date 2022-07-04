@@ -43,7 +43,7 @@ class EquipmentController extends Controller
     public function store(StorePostRequest $request)
     {
         $request->validated();
-        $serialNumbers = getFormattedJsonString($request->serial_number)['sn'];
+        $serialNumbers = isset(getFormattedJsonString($request->serial_number)['sn']) ? getFormattedJsonString($request->serial_number)['sn'] : collect(getFormattedJsonString($request->serial_number))->pluck('sn');
 
         foreach ($serialNumbers as $serialNumber) {
             $equipment = new Equipment();
