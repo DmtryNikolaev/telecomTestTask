@@ -55,8 +55,7 @@ class EquipmentController extends Controller
         }
 
         return redirect()
-            ->route('equipment.index');
-
+            ->route('equipment.index', ['api_token' => $request->input('api_token')]);
     }
 
     /**
