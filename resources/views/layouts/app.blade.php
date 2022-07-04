@@ -13,12 +13,12 @@
 <body>
     <nav class="navbar navbar-light bg-light justify-content-between container">
         <a class="navbar-brand">Telecom</a>
-        <form class="form-inline" action="{{route('searchSN')}}">
+        <form class="form-inline" action="{{route('search')}}">
             <input type="hidden" name="api_token" value="{{config('apitokens')[0]}}">
-            <small>Поиск по серийному номеру</small>
+            <small>Поиск</small>
             <div class="d-flex">
-                <input class="form-control mr-sm-2 me-sm-2" type="text" placeholder="Search" aria-label="Search" id="s" name="serial_number">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <input class="form-control mr-sm-2 me-sm-2" type="text" placeholder="Search" aria-label="Search" id="s" name="search">
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             </div>
         </form>
     </nav>
