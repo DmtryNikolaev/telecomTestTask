@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdateEquipmentRequest;
+use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
 use App\Models\EquipmentType;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        $equipment = Equipment::all();
+        $equipment = (new EquipmentResource(Equipment::all()))->resource;
 
         return view('equipment.index', compact('equipment'));
     }
@@ -29,7 +30,7 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        $equipment = new Equipment();
+        $equipment = (new EquipmentResource(new Equipment()))->resource;
         return view('equipment.create', compact('equipment'));
     }
 
@@ -66,6 +67,8 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
+        $equipment = (new EquipmentResource($equipment))->resource;
+
         return view('equipment.show', compact('equipment'));
     }
 
@@ -77,6 +80,8 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
+        $equipment = (new EquipmentResource($equipment))->resource;
+
         return view('equipment.edit', compact('equipment'));
     }
 
@@ -120,9 +125,8 @@ class EquipmentController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
-        $equipment = Equipment::where('serial_number', 'LIKE', "%{$search}%")
-            ->orWhere('note', 'LIKE', "%{$search}%")
-            ->orderBy('serial_number')->paginate(10);
+        $requiredData = Equipment::where('serial_number', 'LIKE', "%{$search}%")->orWhere('note', 'LIKE', "%{$search}%")->get();
+        $equipment = (new EquipmentResource($requiredData))->resource;
 
         return view('equipment.index', compact('equipment'));
     }
