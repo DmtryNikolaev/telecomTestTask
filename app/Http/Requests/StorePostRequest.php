@@ -45,8 +45,7 @@ class StorePostRequest extends FormRequest
 
         return [
             'code_of_type_equipment' => 'required|min:0|max:100',
-            'serial_number' => ['required', $validateSerialNumber],
-            'note' => 'required|string'
+            'serial_number' => ['required', $validateSerialNumber]
         ];
     }
 }
