@@ -9,7 +9,7 @@ use App\Models\Equipment;
 use App\Models\EquipmentType;
 use Illuminate\Http\Request;
 
-class EquipmentController extends Controller
+class EquipmentController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -43,7 +43,7 @@ class EquipmentController extends Controller
     public function store(StorePostRequest $request)
     {
         $request->validated();
-        $serialNumbers = isset(getFormattedJsonString($request->serial_number)['sn']) ? getFormattedJsonString($request->serial_number)['sn'] : collect(getFormattedJsonString($request->serial_number))->pluck('sn');
+        $serialNumbers = $this->service->getSerialNumbers();
 
         foreach ($serialNumbers as $serialNumber) {
             $equipment = new Equipment();
