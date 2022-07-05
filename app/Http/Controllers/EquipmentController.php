@@ -18,9 +18,9 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        $equipment = (new EquipmentResource(Equipment::all()))->resource;
+        $equipment = new EquipmentResource(Equipment::all());
 
-        return view('equipment.index', compact('equipment'));
+        return $equipment;
     }
 
     /**
