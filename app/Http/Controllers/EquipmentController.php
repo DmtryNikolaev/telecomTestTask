@@ -125,7 +125,7 @@ class EquipmentController extends BaseController
     public function search(Request $request)
     {
         $search = $request->input('search');
-        $requiredData = Equipment::where('serial_number', 'LIKE', "%{$search}%")->orWhere('note', 'LIKE', "%{$search}%")->get();
+        $requiredData = $this->service->getSearchedData($search);
         $equipment = (new EquipmentResource($requiredData))->resource;
 
         return view('equipment.index', compact('equipment'));
