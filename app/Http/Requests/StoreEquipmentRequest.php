@@ -4,12 +4,9 @@ namespace App\Http\Requests;
 
 use App\Models\EquipmentType;
 use Illuminate\Foundation\Http\FormRequest;
-use function Resources\SerialMaskValidate\checkSerialMask;
+use Resources\EquipmentRequestHelper;
 
-require_once(resource_path('src/FormattedJsonString.php'));
-require_once(resource_path('src/SerialMaskValidate.php'));
-
-class StorePostRequest extends FormRequest
+class StoreEquipmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,17 +25,21 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
+        $helper = new EquipmentRequestHelper();
+
         $serialNumberMask = EquipmentType::where('id', $this->input('code_of_type_equipment'))->first()->serial_number_mask;
-        $validateSerialNumber = function ($attribute, $snNotFormat, $fail) use ($serialNumberMask) {
-            if (is_array(getFormattedJsonString($snNotFormat))) {
-                $serialNumbers = isset(getFormattedJsonString($snNotFormat)['sn']) ? getFormattedJsonString($snNotFormat)['sn'] : collect(getFormattedJsonString($snNotFormat))->pluck('sn');
+        $validateSerialNumber = function ($attribute, $snNotFormat, $fail) use ($serialNumberMask, $helper) {
+            if (is_array($helper->getFormattedJsonString($snNotFormat))) {
+                $formattedJsonString = $helper->getFormattedJsonString($snNotFormat);
+
+                $serialNumbers = isset($formattedJsonString['sn']) ? $formattedJsonString['sn'] : collect($formattedJsonString)->pluck('sn');
 
                 foreach ($serialNumbers as $serialNumber) {
-                    if (checkSerialMask($serialNumber, $serialNumberMask) === false) {
+                    if ($helper->checkSerialMask($serialNumber, $serialNumberMask) === false) {
                         $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
                     }
                 }
-            } elseif (!is_array(getFormattedJsonString($snNotFormat))) {
+            } elseif (!is_array($helper->getFormattedJsonString($snNotFormat))) {
                 $fail("{$attribute} должен быть массивом или json");
             }
         };

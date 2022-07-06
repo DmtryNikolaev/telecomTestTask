@@ -4,9 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\EquipmentType;
 use Illuminate\Foundation\Http\FormRequest;
-use function Resources\SerialMaskValidate\checkSerialMask;
-
-require_once(resource_path('src/SerialMaskValidate.php'));
+use Resources\EquipmentRequestHelper;
 
 class UpdateEquipmentRequest extends FormRequest
 {
@@ -27,16 +25,16 @@ class UpdateEquipmentRequest extends FormRequest
      */
     public function rules()
     {
-        $serialNumberMask = EquipmentType::where('id', $this->input('code_of_type_equipment'))->first()->serial_number_mask;
+        $serialNumberMask = EquipmentType::where('id', $this->input('equipment_type_id'))->first()->serial_number_mask;
+        $helper = new EquipmentRequestHelper();
 
         return [
-            'code_of_type_equipment' => 'required|min:0|max:100',
-            'serial_number' => ['required', function ($attribute, $serialNumber, $fail) use ($serialNumberMask) {
-                if (checkSerialMask($serialNumber, $serialNumberMask) === false) {
+            'equipment_type_id' => 'required|min:0|max:100',
+            'serial_number' => ['required', function ($attribute, $serialNumber, $fail) use ($serialNumberMask, $helper) {
+                if ( $helper->checkSerialMask($serialNumber, $serialNumberMask) === false) {
                     $fail("sn {$serialNumber}: {$serialNumberMask} не соответствует выбранному типу оборудования");
                 }
-            }],
-            'note' => 'required|string'
+            }]
         ];
     }
 }
