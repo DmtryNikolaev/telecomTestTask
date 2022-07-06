@@ -10,4 +10,9 @@ class Equipment extends Model
     protected $guarded = ['api_token', '_token'];
 
     use HasFactory;
+
+    public function equipmentType()
+    {
+        return $this->hasOne(EquipmentType::class);
+    }
 }
