@@ -43,12 +43,12 @@ class EquipmentController extends BaseController
     public function store(StorePostRequest $request)
     {
         $request->validated();
-        $serialNumbers = $this->service->getSerialNumbers();
+        $serialNumbers = $this->service->getSerialNumbers($request->input('serial_number'));
 
         foreach ($serialNumbers as $serialNumber) {
             $equipment = new Equipment();
 
-            $equipment->code_of_type_equipment = $request->input('code_of_type_equipment');
+            $equipment->equipment_type_id = $request->input('code_of_type_equipment');
             $equipment->serial_number = $serialNumber;
             $equipment->note = $request->input('note');
 
@@ -98,8 +98,7 @@ class EquipmentController extends BaseController
         $equipment->fill($request->all());
         $equipment->save();
 
-        return redirect()
-            ->route('equipment.index', ['api_token' => $request->input('api_token')]);
+        return response('Данные успешно изменены');
     }
 
     /**
