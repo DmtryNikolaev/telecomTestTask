@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEquipmentRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdateEquipmentRequest;
 use App\Http\Resources\EquipmentResource;
@@ -40,7 +41,7 @@ class EquipmentController extends BaseController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostRequest $request)
+    public function store(StoreEquipmentRequest $request)
     {
         $request->validated();
         $serialNumbers = $this->service->getSerialNumbers($request->input('serial_number'));
@@ -48,7 +49,7 @@ class EquipmentController extends BaseController
         foreach ($serialNumbers as $serialNumber) {
             $equipment = new Equipment();
 
-            $equipment->equipment_type_id = $request->input('code_of_type_equipment');
+            $equipment->equipment_type_id = $request->input('equipment_type_id');
             $equipment->serial_number = $serialNumber;
             $equipment->note = $request->input('note');
 

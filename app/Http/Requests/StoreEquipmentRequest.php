@@ -26,8 +26,7 @@ class StoreEquipmentRequest extends FormRequest
     public function rules()
     {
         $helper = new EquipmentRequestHelper();
-
-        $serialNumberMask = EquipmentType::where('id', $this->input('code_of_type_equipment'))->first()->serial_number_mask;
+        $serialNumberMask = EquipmentType::where('id', $this->input('equipment_type_id'))->first()->serial_number_mask;
         $validateSerialNumber = function ($attribute, $snNotFormat, $fail) use ($serialNumberMask, $helper) {
             if (is_array($helper->getFormattedJsonString($snNotFormat))) {
                 $formattedJsonString = $helper->getFormattedJsonString($snNotFormat);
@@ -45,7 +44,7 @@ class StoreEquipmentRequest extends FormRequest
         };
 
         return [
-            'code_of_type_equipment' => 'required|min:0|max:100',
+            'equipment_type_id' => 'required|min:0|max:100',
             'serial_number' => ['required', $validateSerialNumber]
         ];
     }
