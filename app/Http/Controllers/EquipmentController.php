@@ -55,8 +55,7 @@ class EquipmentController extends BaseController
             $equipment->save();
         }
 
-        return redirect()
-            ->route('equipment.index', ['api_token' => $request->input('api_token')]);
+        return response('Данные внесены успешно');
     }
 
     /**
@@ -67,9 +66,9 @@ class EquipmentController extends BaseController
      */
     public function show(Equipment $equipment)
     {
-        $equipment = (new EquipmentResource($equipment))->resource;
+        $equipment = new EquipmentResource($equipment);
 
-        return view('equipment.show', compact('equipment'));
+        return $equipment;
     }
 
     /**
@@ -80,9 +79,9 @@ class EquipmentController extends BaseController
      */
     public function edit(Equipment $equipment)
     {
-        $equipment = (new EquipmentResource($equipment))->resource;
+        $equipment = new EquipmentResource($equipment);
 
-        return view('equipment.edit', compact('equipment'));
+        return $equipment;
     }
 
     /**
@@ -114,8 +113,7 @@ class EquipmentController extends BaseController
 
         $equipment->delete();
 
-        return redirect()
-            ->route('equipment.index', ['api_token' => $request->input('api_token')]);
+        return response('Запись успешно удалена');
     }
 
     /**
@@ -126,8 +124,9 @@ class EquipmentController extends BaseController
     {
         $search = $request->input('search');
         $requiredData = $this->service->getSearchedData($search);
-        $equipment = (new EquipmentResource($requiredData))->resource;
 
-        return view('equipment.index', compact('equipment'));
+        $equipment = new EquipmentResource($requiredData);
+
+        return $equipment;
     }
 }
