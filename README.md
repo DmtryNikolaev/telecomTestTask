@@ -1,5 +1,3 @@
-# Тестовое задание
-
 ## Установка
 1. `composer install`
 2. `npm install`
